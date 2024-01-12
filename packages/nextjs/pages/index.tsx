@@ -1,59 +1,168 @@
-import Link from "next/link";
+"use client";
+
+import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import type { NextPage } from "next";
-import { BugAntIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import { isAddress } from "viem";
+import { useAccount } from "wagmi";
 import { MetaHeader } from "~~/components/MetaHeader";
+import { useScaffoldContractRead, useScaffoldContractWrite } from "~~/hooks/scaffold-eth";
+
+type RngCommit = {
+  randNum: bigint;
+  itemsToUse: number[];
+  target: number;
+  block: bigint;
+};
+
+type Player = {
+  health: number;
+  items: number[];
+};
+class GameState {
+  readonly turn: number;
+  readonly liveRounds: number;
+  readonly blankRounds: number;
+  readonly rngCommit: RngCommit;
+  readonly player1: Player;
+  readonly player2: Player;
+
+  constructor(
+    turn: number,
+    liveRounds: number,
+    blankRounds: number,
+    rngCommit: RngCommit,
+    player1: Player,
+    player2: Player,
+  ) {
+    this.turn = turn;
+    this.liveRounds = liveRounds;
+    this.blankRounds = blankRounds;
+    this.rngCommit = rngCommit;
+    this.player1 = player1;
+    this.player2 = player2;
+  }
+
+  toString() {
+    return `
+    Turn: ${this.turn}
+    Live Rounds: ${this.liveRounds}
+    Blank Rounds: ${this.blankRounds}
+    `;
+  }
+}
 
 const Home: NextPage = () => {
+  const searchParams = useSearchParams();
+  const player2params = searchParams.get("player2");
+  const [player2, setPlayer2] = useState(player2params);
+
+  useEffect(() => {
+    if (player2params && isAddress(player2params)) {
+      setPlayer2(player2params);
+    }
+  }, [player2params]);
+
+  console.log("player2", searchParams.get("player2"));
+
+  const { writeAsync } = useScaffoldContractWrite({
+    contractName: "ChainRoulette",
+    functionName: "newGameCommit",
+    args: [undefined, undefined],
+    onBlockConfirmation: txnReceipt => {
+      console.log("Commit transaction confirmed", txnReceipt);
+      console.log("Transaction blockHash", txnReceipt.blockHash);
+    },
+  });
+
+  const { writeAsync: revealWriteAsync } = useScaffoldContractWrite({
+    contractName: "ChainRoulette",
+    functionName: "newGameReveal",
+    args: [undefined],
+    onBlockConfirmation: txnReceipt => {
+      console.log("Reveal transaction confirmed", txnReceipt);
+      console.log("Transaction blockHash", txnReceipt.blockHash);
+    },
+  });
+
+  const { address: connectedAddress } = useAccount();
+
+  const { data: gameId } = useScaffoldContractRead({
+    contractName: "ChainRoulette",
+    functionName: "getGameId",
+    args: [connectedAddress, player2 ?? undefined],
+    enabled: isAddress(player2 ?? ""),
+    watch: true,
+  });
+
+  const [gameState, setGameState] = useState<GameState>();
+
+  useScaffoldContractRead({
+    contractName: "ChainRoulette",
+    functionName: "games",
+    args: [gameId],
+    enabled: !!gameId,
+    watch: true,
+    onSuccess: (data: any) => {
+      setGameState(new GameState(data[0], data[1], data[2], data[3], data[4], data[5]));
+    },
+  });
+
+  if (gameState) {
+    return <>{gameState.toString()}</>;
+  }
+
+  if (player2 && isAddress(player2)) {
+    return (
+      <>
+        <MetaHeader />
+        <div className="mx-8 mt-8 shadow-lg p-8 bg-base-100 ring-4 rounded-xl">
+          <div>
+            <p>Player 2 address: {player2}</p>
+            <p>{gameId}</p>
+            <button
+              onClick={() => {
+                revealWriteAsync({ args: [player2] });
+              }}
+            >
+              reveal
+            </button>
+          </div>
+        </div>
+      </>
+    );
+  }
+
   return (
     <>
       <MetaHeader />
-      <div className="flex items-center flex-col flex-grow pt-10">
-        <div className="px-5">
-          <h1 className="text-center mb-8">
-            <span className="block text-2xl mb-2">Welcome to</span>
-            <span className="block text-4xl font-bold">Scaffold-ETH 2</span>
-          </h1>
-          <p className="text-center text-lg">
-            Get started by editing{" "}
-            <code className="italic bg-base-300 text-base font-bold max-w-full break-words break-all inline-block">
-              packages/nextjs/pages/index.tsx
-            </code>
-          </p>
-          <p className="text-center text-lg">
-            Edit your smart contract{" "}
-            <code className="italic bg-base-300 text-base font-bold max-w-full break-words break-all inline-block">
-              YourContract.sol
-            </code>{" "}
-            in{" "}
-            <code className="italic bg-base-300 text-base font-bold max-w-full break-words break-all inline-block">
-              packages/hardhat/contracts
-            </code>
-          </p>
-        </div>
+      <div className="mx-8 mt-8 shadow-lg p-8 bg-base-100 ring-4 rounded-xl">
+        <div>
+          <form
+            onSubmit={async e => {
+              e.preventDefault();
 
-        <div className="flex-grow bg-base-300 w-full mt-16 px-8 py-12">
-          <div className="flex justify-center items-center gap-12 flex-col sm:flex-row">
-            <div className="flex flex-col bg-base-100 px-10 py-10 text-center items-center max-w-xs rounded-3xl">
-              <BugAntIcon className="h-8 w-8 fill-secondary" />
-              <p>
-                Tinker with your smart contract using the{" "}
-                <Link href="/debug" passHref className="link">
-                  Debug Contract
-                </Link>{" "}
-                tab.
-              </p>
-            </div>
-            <div className="flex flex-col bg-base-100 px-10 py-10 text-center items-center max-w-xs rounded-3xl">
-              <MagnifyingGlassIcon className="h-8 w-8 fill-secondary" />
-              <p>
-                Explore your local transactions with the{" "}
-                <Link href="/blockexplorer" passHref className="link">
-                  Block Explorer
-                </Link>{" "}
-                tab.
-              </p>
-            </div>
-          </div>
+              const formData = new FormData(e.target as HTMLFormElement);
+              const p2 = formData.get("player2") as string;
+              if (p2 && isAddress(p2)) {
+                setPlayer2(p2);
+                writeAsync({ args: [p2, BigInt(1)] });
+              } else {
+                alert("Please enter a valid player 2 address");
+              }
+            }}
+          >
+            <label>
+              Player 2 {player2}
+              <input
+                type="text"
+                placeholder="Player 2 address"
+                name="player2"
+                className="input input-bordered input-info w-full max-w-xs ml-4"
+              />
+            </label>
+            <input type="submit" value="Submit" />
+          </form>
         </div>
       </div>
     </>

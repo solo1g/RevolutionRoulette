@@ -4,6 +4,216 @@
  */
 import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 
-const deployedContracts = {} as const;
+const deployedContracts = {
+  31337: {
+    ChainRoulette: {
+      address: "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9",
+      abi: [
+        {
+          inputs: [],
+          stateMutability: "nonpayable",
+          type: "constructor",
+        },
+        {
+          inputs: [],
+          name: "GameDoesNotExist",
+          type: "error",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "player2",
+              type: "address",
+            },
+            {
+              internalType: "uint8[4]",
+              name: "items",
+              type: "uint8[4]",
+            },
+            {
+              internalType: "uint8",
+              name: "target",
+              type: "uint8",
+            },
+            {
+              internalType: "uint256",
+              name: "randNum",
+              type: "uint256",
+            },
+          ],
+          name: "actionsCommit",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "player2",
+              type: "address",
+            },
+            {
+              internalType: "uint8[]",
+              name: "items",
+              type: "uint8[]",
+            },
+          ],
+          name: "actionsRevea",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "bytes32",
+              name: "",
+              type: "bytes32",
+            },
+          ],
+          name: "games",
+          outputs: [
+            {
+              internalType: "uint8",
+              name: "turn",
+              type: "uint8",
+            },
+            {
+              internalType: "uint8",
+              name: "liveRounds",
+              type: "uint8",
+            },
+            {
+              internalType: "uint8",
+              name: "blankRounds",
+              type: "uint8",
+            },
+            {
+              components: [
+                {
+                  internalType: "uint256",
+                  name: "randNum",
+                  type: "uint256",
+                },
+                {
+                  internalType: "uint8[4]",
+                  name: "itemsToUse",
+                  type: "uint8[4]",
+                },
+                {
+                  internalType: "uint8",
+                  name: "target",
+                  type: "uint8",
+                },
+                {
+                  internalType: "uint256",
+                  name: "block",
+                  type: "uint256",
+                },
+              ],
+              internalType: "struct ChainRoulette.RngCommit",
+              name: "commitedRandHash",
+              type: "tuple",
+            },
+            {
+              components: [
+                {
+                  internalType: "uint8",
+                  name: "health",
+                  type: "uint8",
+                },
+                {
+                  internalType: "uint8[4]",
+                  name: "items",
+                  type: "uint8[4]",
+                },
+              ],
+              internalType: "struct ChainRoulette.Player",
+              name: "player1",
+              type: "tuple",
+            },
+            {
+              components: [
+                {
+                  internalType: "uint8",
+                  name: "health",
+                  type: "uint8",
+                },
+                {
+                  internalType: "uint8[4]",
+                  name: "items",
+                  type: "uint8[4]",
+                },
+              ],
+              internalType: "struct ChainRoulette.Player",
+              name: "player2",
+              type: "tuple",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "player1",
+              type: "address",
+            },
+            {
+              internalType: "address",
+              name: "player2",
+              type: "address",
+            },
+          ],
+          name: "getGameId",
+          outputs: [
+            {
+              internalType: "bytes32",
+              name: "",
+              type: "bytes32",
+            },
+          ],
+          stateMutability: "pure",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "player2",
+              type: "address",
+            },
+            {
+              internalType: "uint256",
+              name: "randNum",
+              type: "uint256",
+            },
+          ],
+          name: "newGameCommit",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "player2",
+              type: "address",
+            },
+          ],
+          name: "newGameReveal",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+      ],
+      inheritedFunctions: {},
+    },
+  },
+} as const;
 
 export default deployedContracts satisfies GenericContractsDeclaration;
