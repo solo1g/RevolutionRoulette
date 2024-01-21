@@ -7,7 +7,7 @@ import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 const deployedContracts = {
   10: {
     RevolutionRoulette: {
-      address: "0x9aE11E79cb5C7ed9E9717D85E501301186ca2D94",
+      address: "0xFb352F2C47d723DF52Babb0505F164Fd06b148F3",
       abi: [
         {
           anonymous: false,

@@ -3,14 +3,14 @@
 > Challenge others (possibly with some optimism on the line 🤑) and try your luck. The game gives you some items and a gun with some live and blank rounds. Use them effectively to remain alive and win the game 😎.
 
 * [Try](https://revolution-roulette.vercel.app/) it out.
-* Contract deployed on optimism [here](https://optimistic.etherscan.io/address/0x9aE11E79cb5C7ed9E9717D85E501301186ca2D94)
+* Contract deployed on optimism [here](https://optimistic.etherscan.io/address/0xFb352F2C47d723DF52Babb0505F164Fd06b148F3)
 * 🚀 Built with [Scaffold-Eth](https://scaffoldeth.io/)
 
 ## ⛹️‍♂️ How to Play?
 * Enter the address of your opponent along with some bet.
 * The opponent then needs to "accept" the challenge paying the same amount.
 * Some random player is chosen to take the first shot. Don't worry the other player gets +1 ❤️ to compensate for the disadvantage.
-* Items are given from time to time, aim is to get the opponent's hp to 0.
+* Items are given from time to time (there's a 25% chance each turn), aim is to get the opponent's hp to 0.
 
 # 👷‍♂️ Building locally
 

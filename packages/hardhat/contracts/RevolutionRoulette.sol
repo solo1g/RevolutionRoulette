@@ -395,14 +395,25 @@ contract RevolutionRoulette {
 		// 25% chance to get 2 items
 		(random, slice) = _getBitSlice(random, 2);
 		if (slice == 0) {
-			// giving 2 items to each player initially
+			// add 2 items
 			for (uint8 i = 0; i < 2; i++) {
 				(random, slice) = _getBitSlice(random, 8);
-				currentPlayer.items[i] = uint8((slice % ITEM_COUNT) + 1);
+				for (uint8 j = 0; j < INVENTORY_SIZE; j++) {
+					if (currentPlayer.items[j] == 0) {
+						currentPlayer.items[j] = uint8(
+							(slice % ITEM_COUNT) + 1
+						);
+						break;
+					}
+				}
 			}
 			for (uint8 i = 0; i < 2; i++) {
-				(random, slice) = _getBitSlice(random, 8);
-				otherPlayer.items[i] = uint8((slice % ITEM_COUNT) + 1);
+				for (uint8 j = 0; j < INVENTORY_SIZE; j++) {
+					if (otherPlayer.items[j] == 0) {
+						otherPlayer.items[j] = uint8((slice % ITEM_COUNT) + 1);
+						break;
+					}
+				}
 			}
 		}
 
@@ -460,7 +471,7 @@ contract RevolutionRoulette {
 
 		//items
 		uint256 slice;
-		// giving 2 items to each player initially
+
 		for (uint8 i = 0; i < 2; i++) {
 			(random, slice) = _getBitSlice(random, 8);
 			game.player1.items[i] = uint8((slice % ITEM_COUNT) + 1);
