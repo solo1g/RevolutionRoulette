@@ -292,6 +292,8 @@ contract RevolutionRoulette {
 				currentPlayer.health = 0;
 				otherPlayer.health = 1;
 			}
+
+			game.turn = game.player1.health == 0 ? 1 : 0;
 			return;
 		}
 		if ((game.commitedRandHash.itemsToUse >> 14) & 1 == 1) {
