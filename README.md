@@ -3,7 +3,7 @@
 > Challenge others (possibly with some optimism on the line 🤑) and try your luck. The game gives you some items and a gun with some live and blank rounds. Use them effectively to remain alive and win the game 😎.
 
 * [Try](https://revolution-roulette.vercel.app/) it out.
-* Contract deployed on optimism [here](https://optimistic.etherscan.io/address/0xFb352F2C47d723DF52Babb0505F164Fd06b148F3)
+* Contract deployed on optimism [here](https://optimistic.etherscan.io/address/0xd89BFE521162F404881F3ec5715A8B3620A2B7B3)
 * 🚀 Built with [Scaffold-Eth](https://scaffoldeth.io/)
 
 ## ⛹️‍♂️ How to Play?

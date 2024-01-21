@@ -339,6 +339,7 @@ contract RevolutionRoulette {
 				if (otherPlayer.health == 0) {
 					// game over
 					game.status = 3;
+					game.turn = game.player1.health == 0 ? 1 : 0;
 					return;
 				}
 			} else {
@@ -357,6 +358,7 @@ contract RevolutionRoulette {
 				if (currentPlayer.health == 0) {
 					// game over
 					game.status = 3;
+					game.turn = game.player1.health == 0 ? 1 : 0;
 					return;
 				}
 			}
