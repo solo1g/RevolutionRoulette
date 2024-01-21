@@ -1,0 +1,183 @@
+// //SPDX-License-Identifier: MIT
+// pragma solidity >=0.8.0 <0.9.0;
+
+// import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+// import "@openzeppelin/contracts/utils/Strings.sol";
+// import "@openzeppelin/contracts/utils/Base64.sol";
+// import "./RevolutionRoulette.sol";
+
+// // Inspired from https://gist.githubusercontent.com/danielkhoo/f09c00b6146d5d74707abbd223bbf021/raw/9ebb903e95806083059c517efeaa4324950e8b60/BuidlGuidlTabard.sol
+// contract RevolutionRouletteNFT is ERC721 {
+// 	// using Strings for uint256;
+// 	mapping(address => bytes32) public names;
+// 	RevolutionRoulette revRoulette;
+
+// 	constructor(
+// 		address revRouletteContract
+// 	) ERC721("RevolutionRoulette", "RevR") {
+// 		revRoulette = RevolutionRoulette(revRouletteContract);
+// 	}
+
+// 	function mintItem(bytes32 name) public {
+// 		names[msg.sender] = name;
+
+// 		// Set the token id to the address of minter.
+// 		// Inspired by https://gist.github.com/z0r0z/6ca37df326302b0ec8635b8796a4fdbb
+// 		_mint(msg.sender, uint256(uint160(msg.sender)));
+// 	}
+
+// 	function tokenURI(uint256 id) public view override returns (string memory) {
+// 		require(_exists(id), "Not minted yet");
+
+// 		string memory svg = generateSVG(address(uint160(id)));
+
+// 		return
+// 			string(
+// 				abi.encodePacked(
+// 					"data:application/json;base64,",
+// 					Base64.encode(
+// 						bytes(
+// 							abi.encodePacked(
+// 								'{"name":"Revolution Roulette NFT", "image":"',
+// 								svg,
+// 								'"}'
+// 							)
+// 						)
+// 					)
+// 				)
+// 			);
+// 	}
+
+// 	function generateSVG(
+// 		address boundAddress
+// 	) internal view returns (string memory) {
+// 		string memory part1 = _getSVGPart0(boundAddress);
+// 		string memory part2 = getSVGPart2(boundAddress);
+// 		string memory hexAdress = string(
+// 			abi.encodePacked(
+// 				"0x",
+// 				Strings.toHexString(uint256(uint160(boundAddress)), 40)
+// 			)
+// 		);
+// 		return
+// 			string(
+// 				abi.encodePacked(
+// 					hexAdress,
+// 					"</text>",
+// 					'<text x="20" y="40" fill="#E0E0E0" font-family="\'Press Start 2P\', sans-serif" font-size="16" fill="black">',
+// 					"<tspan>Revolution</tspan>",
+// 					'<tspan x="20" dy="30">Roulette</tspan>',
+// 					unicode'<tspan x="20" dy="50">▄︻デ══━一</tspan>',
+// 					"<tspan>",
+// 					'<animate attributeName="x" from="120" to="400" dur="1s" repeatCount="indefinite" />',
+// 					unicode"💥",
+// 					"</tspan>",
+// 					'<tspan x="20" y="300">',
+// 					part2,
+// 					"</tspan>",
+// 					"</text>",
+// 					"</svg>"
+// 				)
+// 			);
+// 	}
+
+// 	function _getSVGPart0(
+// 		address boundAddress
+// 	) internal view returns (string memory) {
+// 		return
+// 			string(
+// 				abi.encodePacked(
+// 					_getSVGPart1(),
+// 					Strings.toString(uint256(names[boundAddress])),
+// 					"</tspan>",
+// 					'<tspan x=50% dy=30 font-size="8">the<tspan>',
+// 					'<tspan x=50% dy=30 font-size="14">"SLAYER"</tspan>',
+// 					"</text>",
+// 					'<text x="520" y="205" fill="#E0E0E0" font-family="\'Press Start 2P\', sans-serif" font-size="6" text-anchor="end" alignment-baseline="middle" transform="rotate(90 390 200)">'
+// 				)
+// 			);
+// 	}
+
+// 	function _getSVGPart1() internal pure returns (string memory) {
+// 		return
+// 			string(
+// 				abi.encodePacked(
+// 					'<svg width="400" height="400" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">',
+// 					"<defs>",
+// 					"<style>",
+// 					"@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');",
+// 					"</style>",
+// 					'<linearGradient id="greenGrad" x1="0%" y1="0%" x2="0%" y2="100%">',
+// 					'<stop offset="0%" style="stop-color:#0F2027; stop-opacity:1" />',
+// 					'<stop offset="50%" style="stop-color:#203A43; stop-opacity:1" />',
+// 					'<stop offset="100%" style="stop-color:#2C5364; stop-opacity:1" />',
+// 					"</linearGradient>",
+// 					'<linearGradient id="purpleGrad" x1="0%" y1="0%" x2="100%" y2="0%">',
+// 					'<stop offset="0%" style="stop-color:#0f0c29; stop-opacity:1" />',
+// 					'<stop offset="50%" style="stop-color:#000; stop-opacity:1" />',
+// 					'<stop offset="100%" style="stop-color:#0f0c29; stop-opacity:1" />',
+// 					"</linearGradient>",
+// 					"</defs>",
+// 					'<rect width="100%" height="100%" fill="url(#greenGrad)" />',
+// 					'<rect width="100%" height="100%" fill="none" stroke="#00b09b" stroke-width="10" />',
+// 					'<rect x="10%" y="145" height="120" width="80%" fill="url(#purpleGrad)" rx="5" ry="5" />',
+// 					'<text x="50%" y="177" fill="#E0E0E0" font-family="\'Press Start 2P\', sans-serif" font-size="12" dominant-baseline="middle" text-anchor="middle">',
+// 					"<tspan>"
+// 				)
+// 			);
+// 	}
+
+// 	function getSVGPart2(
+// 		address boundAddress
+// 	) internal view returns (string memory) {
+// 		(
+// 			uint32 wins,
+// 			uint32 losses,
+// 			uint256 amtWon,
+// 			uint256 amtLost
+// 		) = revRoulette.stats(boundAddress);
+
+// 		return
+// 			string(
+// 				abi.encodePacked(
+// 					abi.encodePacked("Wins: ", Strings.toString(wins)),
+// 					"</tspan>",
+// 					'<tspan x="20" dy="30">',
+// 					abi.encodePacked("L: ", Strings.toString(losses)),
+// 					"</tspan>",
+// 					'<tspan x="20" dy="30">',
+// 					abi.encodePacked(unicode"Ξ ", profitString(amtWon, amtLost))
+// 				)
+// 			);
+// 	}
+
+// 	function profitString(
+// 		uint256 gain,
+// 		uint256 loss
+// 	) public pure returns (string memory) {
+// 		if (gain > loss) {
+// 			return string(weiToEtherString(gain - loss));
+// 		} else {
+// 			return string(abi.encodePacked("-", weiToEtherString(loss - gain)));
+// 		}
+// 	}
+
+// 	function weiToEtherString(
+// 		uint256 amountInWei
+// 	) public pure returns (string memory) {
+// 		// 1 ether == 1e18 wei
+// 		uint256 amountInEther = amountInWei / 1e18;
+// 		uint256 integerPart = amountInEther;
+// 		uint256 decimalPart = (amountInEther % 1e18) / 1e13;
+
+// 		// Concatenate the integer and decimal parts
+// 		return
+// 			string(
+// 				abi.encodePacked(
+// 					Strings.toString(integerPart),
+// 					".",
+// 					Strings.toString(decimalPart)
+// 				)
+// 			);
+// 	}
+// }

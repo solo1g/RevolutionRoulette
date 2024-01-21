@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import type { AppProps } from "next/app";
+import localFont from "next/font/local";
 import { RainbowKitProvider, darkTheme, lightTheme } from "@rainbow-me/rainbowkit";
 import "@rainbow-me/rainbowkit/styles.css";
 import NextNProgress from "nextjs-progressbar";
@@ -15,6 +16,24 @@ import { wagmiConfig } from "~~/services/web3/wagmiConfig";
 import { appChains } from "~~/services/web3/wagmiConnectors";
 import "~~/styles/globals.css";
 
+const bitFont = localFont({
+  src: [
+    {
+      path: "../public/fonts/bit-font.ttf",
+    },
+  ],
+  variable: "--font-bit",
+});
+
+const pacificoFont = localFont({
+  src: [
+    {
+      path: "../public/fonts/Pacifico-Regular.ttf",
+    },
+  ],
+  variable: "--font-pacifico",
+});
+
 const ScaffoldEthApp = ({ Component, pageProps }: AppProps) => {
   const price = useNativeCurrencyPrice();
   const setNativeCurrencyPrice = useGlobalState(state => state.setNativeCurrencyPrice);
@@ -27,7 +46,7 @@ const ScaffoldEthApp = ({ Component, pageProps }: AppProps) => {
 
   return (
     <>
-      <div className="flex flex-col min-h-screen">
+      <div className={`flex flex-col min-h-screen bg-blade-100 ${bitFont.variable} ${pacificoFont.variable}`}>
         <Header />
         <main className="relative flex flex-col flex-1">
           <Component {...pageProps} />

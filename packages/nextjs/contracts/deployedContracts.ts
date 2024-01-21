@@ -5,19 +5,84 @@
 import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 
 const deployedContracts = {
-  31337: {
-    ChainRoulette: {
-      address: "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9",
+  10: {
+    RevolutionRoulette: {
+      address: "0x37675Cc8fE0324F35d17b40D3bBA54aAf4128E68",
       abi: [
         {
-          inputs: [],
-          stateMutability: "nonpayable",
-          type: "constructor",
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "address",
+              name: "to",
+              type: "address",
+            },
+            {
+              indexed: false,
+              internalType: "address",
+              name: "from",
+              type: "address",
+            },
+            {
+              indexed: false,
+              internalType: "uint256",
+              name: "amount",
+              type: "uint256",
+            },
+          ],
+          name: "Challenge",
+          type: "event",
         },
         {
-          inputs: [],
-          name: "GameDoesNotExist",
-          type: "error",
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "uint256",
+              name: "gameId",
+              type: "uint256",
+            },
+            {
+              indexed: false,
+              internalType: "address",
+              name: "actionBy",
+              type: "address",
+            },
+            {
+              indexed: false,
+              internalType: "bool",
+              name: "otherHit",
+              type: "bool",
+            },
+            {
+              indexed: false,
+              internalType: "bool",
+              name: "wasLive",
+              type: "bool",
+            },
+          ],
+          name: "GameLog",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "address",
+              name: "player",
+              type: "address",
+            },
+            {
+              indexed: false,
+              internalType: "address",
+              name: "with",
+              type: "address",
+            },
+          ],
+          name: "RecentGame",
+          type: "event",
         },
         {
           inputs: [
@@ -27,9 +92,9 @@ const deployedContracts = {
               type: "address",
             },
             {
-              internalType: "uint8[4]",
-              name: "items",
-              type: "uint8[4]",
+              internalType: "uint16",
+              name: "itemsToUse",
+              type: "uint16",
             },
             {
               internalType: "uint8",
@@ -54,13 +119,21 @@ const deployedContracts = {
               name: "player2",
               type: "address",
             },
+          ],
+          name: "actionsReveal",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
             {
-              internalType: "uint8[]",
-              name: "items",
-              type: "uint8[]",
+              internalType: "address",
+              name: "player2",
+              type: "address",
             },
           ],
-          name: "actionsRevea",
+          name: "claimRewards",
           outputs: [],
           stateMutability: "nonpayable",
           type: "function",
@@ -91,6 +164,16 @@ const deployedContracts = {
               type: "uint8",
             },
             {
+              internalType: "uint8",
+              name: "status",
+              type: "uint8",
+            },
+            {
+              internalType: "uint256",
+              name: "betAmount",
+              type: "uint256",
+            },
+            {
               components: [
                 {
                   internalType: "uint256",
@@ -98,9 +181,9 @@ const deployedContracts = {
                   type: "uint256",
                 },
                 {
-                  internalType: "uint8[4]",
+                  internalType: "uint16",
                   name: "itemsToUse",
-                  type: "uint8[4]",
+                  type: "uint16",
                 },
                 {
                   internalType: "uint8",
@@ -113,7 +196,7 @@ const deployedContracts = {
                   type: "uint256",
                 },
               ],
-              internalType: "struct ChainRoulette.RngCommit",
+              internalType: "struct RevolutionRoulette.RngCommit",
               name: "commitedRandHash",
               type: "tuple",
             },
@@ -129,8 +212,13 @@ const deployedContracts = {
                   name: "items",
                   type: "uint8[4]",
                 },
+                {
+                  internalType: "uint8",
+                  name: "effects",
+                  type: "uint8",
+                },
               ],
-              internalType: "struct ChainRoulette.Player",
+              internalType: "struct RevolutionRoulette.Player",
               name: "player1",
               type: "tuple",
             },
@@ -146,8 +234,13 @@ const deployedContracts = {
                   name: "items",
                   type: "uint8[4]",
                 },
+                {
+                  internalType: "uint8",
+                  name: "effects",
+                  type: "uint8",
+                },
               ],
-              internalType: "struct ChainRoulette.Player",
+              internalType: "struct RevolutionRoulette.Player",
               name: "player2",
               type: "tuple",
             },
@@ -194,7 +287,7 @@ const deployedContracts = {
           ],
           name: "newGameCommit",
           outputs: [],
-          stateMutability: "nonpayable",
+          stateMutability: "payable",
           type: "function",
         },
         {
@@ -207,7 +300,713 @@ const deployedContracts = {
           ],
           name: "newGameReveal",
           outputs: [],
+          stateMutability: "payable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "",
+              type: "address",
+            },
+          ],
+          name: "stats",
+          outputs: [
+            {
+              internalType: "uint32",
+              name: "wins",
+              type: "uint32",
+            },
+            {
+              internalType: "uint32",
+              name: "losses",
+              type: "uint32",
+            },
+            {
+              internalType: "uint256",
+              name: "moneyWon",
+              type: "uint256",
+            },
+            {
+              internalType: "uint256",
+              name: "moneyLost",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+      ],
+      inheritedFunctions: {},
+    },
+  },
+  31337: {
+    RevolutionRoulette: {
+      address: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+      abi: [
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "address",
+              name: "to",
+              type: "address",
+            },
+            {
+              indexed: false,
+              internalType: "address",
+              name: "from",
+              type: "address",
+            },
+            {
+              indexed: false,
+              internalType: "uint256",
+              name: "amount",
+              type: "uint256",
+            },
+          ],
+          name: "Challenge",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "uint256",
+              name: "gameId",
+              type: "uint256",
+            },
+            {
+              indexed: false,
+              internalType: "address",
+              name: "actionBy",
+              type: "address",
+            },
+            {
+              indexed: false,
+              internalType: "bool",
+              name: "otherHit",
+              type: "bool",
+            },
+            {
+              indexed: false,
+              internalType: "bool",
+              name: "wasLive",
+              type: "bool",
+            },
+          ],
+          name: "GameLog",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "address",
+              name: "player",
+              type: "address",
+            },
+            {
+              indexed: false,
+              internalType: "address",
+              name: "with",
+              type: "address",
+            },
+          ],
+          name: "RecentGame",
+          type: "event",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "player2",
+              type: "address",
+            },
+            {
+              internalType: "uint16",
+              name: "itemsToUse",
+              type: "uint16",
+            },
+            {
+              internalType: "uint8",
+              name: "target",
+              type: "uint8",
+            },
+            {
+              internalType: "uint256",
+              name: "randNum",
+              type: "uint256",
+            },
+          ],
+          name: "actionsCommit",
+          outputs: [],
           stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "player2",
+              type: "address",
+            },
+          ],
+          name: "actionsReveal",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "player2",
+              type: "address",
+            },
+          ],
+          name: "claimRewards",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "bytes32",
+              name: "",
+              type: "bytes32",
+            },
+          ],
+          name: "games",
+          outputs: [
+            {
+              internalType: "uint8",
+              name: "turn",
+              type: "uint8",
+            },
+            {
+              internalType: "uint8",
+              name: "liveRounds",
+              type: "uint8",
+            },
+            {
+              internalType: "uint8",
+              name: "blankRounds",
+              type: "uint8",
+            },
+            {
+              internalType: "uint8",
+              name: "status",
+              type: "uint8",
+            },
+            {
+              internalType: "uint256",
+              name: "betAmount",
+              type: "uint256",
+            },
+            {
+              components: [
+                {
+                  internalType: "uint256",
+                  name: "randNum",
+                  type: "uint256",
+                },
+                {
+                  internalType: "uint16",
+                  name: "itemsToUse",
+                  type: "uint16",
+                },
+                {
+                  internalType: "uint8",
+                  name: "target",
+                  type: "uint8",
+                },
+                {
+                  internalType: "uint256",
+                  name: "block",
+                  type: "uint256",
+                },
+              ],
+              internalType: "struct RevolutionRoulette.RngCommit",
+              name: "commitedRandHash",
+              type: "tuple",
+            },
+            {
+              components: [
+                {
+                  internalType: "uint8",
+                  name: "health",
+                  type: "uint8",
+                },
+                {
+                  internalType: "uint8[4]",
+                  name: "items",
+                  type: "uint8[4]",
+                },
+                {
+                  internalType: "uint8",
+                  name: "effects",
+                  type: "uint8",
+                },
+              ],
+              internalType: "struct RevolutionRoulette.Player",
+              name: "player1",
+              type: "tuple",
+            },
+            {
+              components: [
+                {
+                  internalType: "uint8",
+                  name: "health",
+                  type: "uint8",
+                },
+                {
+                  internalType: "uint8[4]",
+                  name: "items",
+                  type: "uint8[4]",
+                },
+                {
+                  internalType: "uint8",
+                  name: "effects",
+                  type: "uint8",
+                },
+              ],
+              internalType: "struct RevolutionRoulette.Player",
+              name: "player2",
+              type: "tuple",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "player1",
+              type: "address",
+            },
+            {
+              internalType: "address",
+              name: "player2",
+              type: "address",
+            },
+          ],
+          name: "getGameId",
+          outputs: [
+            {
+              internalType: "bytes32",
+              name: "",
+              type: "bytes32",
+            },
+          ],
+          stateMutability: "pure",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "player2",
+              type: "address",
+            },
+            {
+              internalType: "uint256",
+              name: "randNum",
+              type: "uint256",
+            },
+          ],
+          name: "newGameCommit",
+          outputs: [],
+          stateMutability: "payable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "player2",
+              type: "address",
+            },
+          ],
+          name: "newGameReveal",
+          outputs: [],
+          stateMutability: "payable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "",
+              type: "address",
+            },
+          ],
+          name: "stats",
+          outputs: [
+            {
+              internalType: "uint32",
+              name: "wins",
+              type: "uint32",
+            },
+            {
+              internalType: "uint32",
+              name: "losses",
+              type: "uint32",
+            },
+            {
+              internalType: "uint256",
+              name: "moneyWon",
+              type: "uint256",
+            },
+            {
+              internalType: "uint256",
+              name: "moneyLost",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+      ],
+      inheritedFunctions: {},
+    },
+  },
+  11155111: {
+    RevolutionRoulette: {
+      address: "0x369822cC31A3d8Bff14DE74cfeB67CeB9F0a002C",
+      abi: [
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "address",
+              name: "to",
+              type: "address",
+            },
+            {
+              indexed: false,
+              internalType: "address",
+              name: "from",
+              type: "address",
+            },
+            {
+              indexed: false,
+              internalType: "uint256",
+              name: "amount",
+              type: "uint256",
+            },
+          ],
+          name: "Challenge",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "uint256",
+              name: "gameId",
+              type: "uint256",
+            },
+            {
+              indexed: false,
+              internalType: "address",
+              name: "actionBy",
+              type: "address",
+            },
+            {
+              indexed: false,
+              internalType: "bool",
+              name: "otherHit",
+              type: "bool",
+            },
+            {
+              indexed: false,
+              internalType: "bool",
+              name: "wasLive",
+              type: "bool",
+            },
+          ],
+          name: "GameLog",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "address",
+              name: "player",
+              type: "address",
+            },
+            {
+              indexed: false,
+              internalType: "address",
+              name: "with",
+              type: "address",
+            },
+          ],
+          name: "RecentGame",
+          type: "event",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "player2",
+              type: "address",
+            },
+            {
+              internalType: "uint16",
+              name: "itemsToUse",
+              type: "uint16",
+            },
+            {
+              internalType: "uint8",
+              name: "target",
+              type: "uint8",
+            },
+            {
+              internalType: "uint256",
+              name: "randNum",
+              type: "uint256",
+            },
+          ],
+          name: "actionsCommit",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "player2",
+              type: "address",
+            },
+          ],
+          name: "actionsReveal",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "player2",
+              type: "address",
+            },
+          ],
+          name: "claimRewards",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "bytes32",
+              name: "",
+              type: "bytes32",
+            },
+          ],
+          name: "games",
+          outputs: [
+            {
+              internalType: "uint8",
+              name: "turn",
+              type: "uint8",
+            },
+            {
+              internalType: "uint8",
+              name: "liveRounds",
+              type: "uint8",
+            },
+            {
+              internalType: "uint8",
+              name: "blankRounds",
+              type: "uint8",
+            },
+            {
+              internalType: "uint8",
+              name: "status",
+              type: "uint8",
+            },
+            {
+              internalType: "uint256",
+              name: "betAmount",
+              type: "uint256",
+            },
+            {
+              components: [
+                {
+                  internalType: "uint256",
+                  name: "randNum",
+                  type: "uint256",
+                },
+                {
+                  internalType: "uint16",
+                  name: "itemsToUse",
+                  type: "uint16",
+                },
+                {
+                  internalType: "uint8",
+                  name: "target",
+                  type: "uint8",
+                },
+                {
+                  internalType: "uint256",
+                  name: "block",
+                  type: "uint256",
+                },
+              ],
+              internalType: "struct RevolutionRoulette.RngCommit",
+              name: "commitedRandHash",
+              type: "tuple",
+            },
+            {
+              components: [
+                {
+                  internalType: "uint8",
+                  name: "health",
+                  type: "uint8",
+                },
+                {
+                  internalType: "uint8[4]",
+                  name: "items",
+                  type: "uint8[4]",
+                },
+                {
+                  internalType: "uint8",
+                  name: "effects",
+                  type: "uint8",
+                },
+              ],
+              internalType: "struct RevolutionRoulette.Player",
+              name: "player1",
+              type: "tuple",
+            },
+            {
+              components: [
+                {
+                  internalType: "uint8",
+                  name: "health",
+                  type: "uint8",
+                },
+                {
+                  internalType: "uint8[4]",
+                  name: "items",
+                  type: "uint8[4]",
+                },
+                {
+                  internalType: "uint8",
+                  name: "effects",
+                  type: "uint8",
+                },
+              ],
+              internalType: "struct RevolutionRoulette.Player",
+              name: "player2",
+              type: "tuple",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "player1",
+              type: "address",
+            },
+            {
+              internalType: "address",
+              name: "player2",
+              type: "address",
+            },
+          ],
+          name: "getGameId",
+          outputs: [
+            {
+              internalType: "bytes32",
+              name: "",
+              type: "bytes32",
+            },
+          ],
+          stateMutability: "pure",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "player2",
+              type: "address",
+            },
+            {
+              internalType: "uint256",
+              name: "randNum",
+              type: "uint256",
+            },
+          ],
+          name: "newGameCommit",
+          outputs: [],
+          stateMutability: "payable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "player2",
+              type: "address",
+            },
+          ],
+          name: "newGameReveal",
+          outputs: [],
+          stateMutability: "payable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "",
+              type: "address",
+            },
+          ],
+          name: "stats",
+          outputs: [
+            {
+              internalType: "uint32",
+              name: "wins",
+              type: "uint32",
+            },
+            {
+              internalType: "uint32",
+              name: "losses",
+              type: "uint32",
+            },
+            {
+              internalType: "uint256",
+              name: "moneyWon",
+              type: "uint256",
+            },
+            {
+              internalType: "uint256",
+              name: "moneyLost",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "view",
           type: "function",
         },
       ],

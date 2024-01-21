@@ -1,0 +1,41 @@
+<svg width="400" height="400" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+    </style>
+    <linearGradient id="greenGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#0F2027; stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#203A43; stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2C5364; stop-opacity:1" />
+    </linearGradient>
+  </defs>
+
+  <rect width="100%" height="100%" fill="url(#greenGrad)" />
+
+  <rect width="100%" height="100%" fill="none" stroke="#00b09b" stroke-width="10" />
+
+  <rect x="10%" y="145" height="120" width="80%" rx="5" ry="5" />
+
+  <text x="50%" y="177" fill="#E0E0E0" font-family="'Press Start 2P', sans-serif" font-size="12" dominant-baseline="middle" text-anchor="middle">
+    <tspan>1234567891234567891234</tspan>
+    <tspan x=50% dy=30 font-size="8">the<tspan>
+    <tspan x=50% dy=30 font-size="14">"SLAYER"</tspan>
+  </text>
+
+  <text x="520" y="205" fill="#E0E0E0" font-family="'Press Start 2P', sans-serif" font-size="6" text-anchor="end" alignment-baseline="middle" transform="rotate(90 390 200)">
+    0xD7847501b49263CE620Ac799e8745F6F26bF7cCb
+  </text>
+
+  <text x="20" y="40" fill="#E0E0E0" font-family="'Press Start 2P', sans-serif" font-size="16" fill="black">
+    <tspan>Revolution</tspan>
+    <tspan x="20" dy="30">Roulette</tspan>
+    <tspan x="20" dy="50">▄︻デ══━一</tspan>
+    <tspan>
+      <animate attributeName="x" from="120" to="400" dur="1s" repeatCount="indefinite" />
+      💥
+    </tspan>
+    <tspan x="20" y="300">W 1</tspan>
+    <tspan x="20" dy="30">L 1</tspan>
+    <tspan x="20" dy="30">Ξ 0.0005</tspan>
+  </text>
+</svg>
